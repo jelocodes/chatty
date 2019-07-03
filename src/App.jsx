@@ -4,16 +4,6 @@ import Message from "./Message.jsx";
 import MessageList from "./Messagelist.jsx";
 import ChatBar from "./ChatBar.jsx";
 
-generateRandomString = () => {
-  let result = '';
-  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let charactersLength = characters.length;
-  for (let i = 0; i < 6; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
-
 class App extends Component {
   constructor() {
     super()
@@ -21,17 +11,27 @@ class App extends Component {
       currentUser: {name: "Micodes"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
         {
-          id: generateRandomString(),
+          id: this.generateRandomString(),
           username: "Bob",
           content: "Has anyone seen my marbles?",
         },
         {
-          id: generateRandomString(),
+          id: this.generateRandomString(),
           username: "Anonymous",
           content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
         }
       ]
     }
+  }
+
+  generateRandomString = () => {
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for (let i = 0; i < 6; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
   }
 
   render() {
