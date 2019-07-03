@@ -4,6 +4,7 @@ class ChatBar extends Component {
     handleKeyPress = (e) => {
       if (e.key === 'Enter') {
         console.log(e.target.value)
+        this.props.handleMessage({id: this.props.generateRandomString(), username: this.props.currentUser, content: e.target.value});
       }
     }
     render(){

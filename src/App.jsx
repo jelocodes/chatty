@@ -24,6 +24,11 @@ class App extends Component {
     }
   }
 
+  handleMessage = (newMessage) => {
+    const messages = this.state.messages.concat(newMessage);
+    this.setState({messages: messages});
+  }
+
   generateRandomString = () => {
     let result = '';
     let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -55,7 +60,7 @@ class App extends Component {
         <div className="message system">
           Anonymous1 changed their name to nomnom.
         </div>
-        <ChatBar currentUser={this.state.currentUser.name} />
+        <ChatBar currentUser={this.state.currentUser.name} generateRandomString={this.generateRandomString} handleMessage={this.handleMessage} />
       </div>
     );
   }
