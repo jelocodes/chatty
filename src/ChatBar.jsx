@@ -7,7 +7,7 @@ class ChatBar extends Component {
         if (e.target.matches('.chatbar-message')) {
           this.props.handleMessage({id: this.props.generateRandomString(), username: this.props.currentUser, content: e.target.value});
         } else if (e.target.matches('.chatbar-username')) {
-          this.props.handleMessage({type: 'postNotification', data: {name: e.target.value}});
+          this.props.handleMessage({data: {name: e.target.value}});
         }
         e.target.value = '';
       }

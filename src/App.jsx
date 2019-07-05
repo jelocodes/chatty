@@ -56,10 +56,11 @@ class App extends Component {
       if (!!receivedData.content) {
        const messages = this.state.messages.concat(receivedData);
         this.setState({messages: messages});
+      } else if (!!receivedData.type) {
+        this.handleNotification(receivedData);
       } else {
-        this.handleNotification({type: "postNotification", content: `${this.state.currentUser.name} has changed their name to ${receivedData.data.name}`});
-        console.log(receivedData);
         this.setState({currentUser: receivedData.data});
+        this.state.socket.send(JSON.stringify({type: "postNotification", content: `${this.state.currentUser.name} has changed their name to ${receivedData.data.name}`}));
       }
     };
   }
