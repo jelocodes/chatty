@@ -26,10 +26,15 @@ wss.on('connection', (ws) => {
   ws.on('message', function incoming(data){
     data.id = uuidv4();
     console.log(data);
-    wss.clients.forEach(function each(client) {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(data);
-      }
-    });
+    console.log(!!(JSON.parse(data)).content)
+    if (!!(JSON.parse(data)).content) {
+      wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(data);
+        }
+      });
+    } else {
+      ws.send(data);
+    }
   });
 });

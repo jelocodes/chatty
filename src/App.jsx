@@ -9,24 +9,9 @@ class App extends Component {
     super()
     this.state = {
       currentUser: {name: "Micodes"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: [
-        {
-          id: this.generateRandomString(),
-          username: "Bob",
-          content: "Has anyone seen my marbles?",
-        },
-        {
-          id: this.generateRandomString(),
-          username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-        }
-      ]
+      messages: [], //messages from the server will now be stored here as they arrive
+      socket: new WebSocket('http://localhost:3001'.replace(/^http(s)?/, "ws$1"))
     }
-  }
-
-  handleMessage = (newMessage) => {
-    const messages = this.state.messages.concat(newMessage);
-    this.setState({messages: messages});
   }
 
   generateRandomString = () => {
@@ -50,7 +35,36 @@ class App extends Component {
       // Calling setState will trigger a call to render() in App and all child components.
       this.setState({messages: messages})
     }, 3000);
+
+    //this.socket = new WebSocket('http://localhost:3001'.replace(/^http(s)?/, "ws$1")); //replace http with ws
+    this.state.socket.onopen = function(event) {
+      console.log('Connected to server');
+    };
   }
+
+  handleNotification = (newNotification) => {
+    const messages = this.state.messages.concat(newNotification);
+    this.setState({messages: messages});
+  }
+
+  handleMessage = (newMessage) => {
+    // const messages = this.state.messages.concat(newMessage);
+    // this.setState({messages: messages});
+    this.state.socket.send(JSON.stringify(newMessage));
+    this.state.socket.onmessage = (event) => {
+      let receivedData = JSON.parse(event.data);
+      if (!!receivedData.content) {
+       const messages = this.state.messages.concat(receivedData);
+        this.setState({messages: messages});
+      } else {
+        this.handleNotification({type: "postNotification", content: `${this.state.currentUser.name} has changed their name to ${receivedData.data.name}`});
+        console.log(receivedData);
+        this.setState({currentUser: receivedData.data});
+      }
+    };
+  }
+
+
 
   render() {
     return (
