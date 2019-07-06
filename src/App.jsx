@@ -10,7 +10,8 @@ class App extends Component {
     this.state = {
       currentUser: {name: "Micodes"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [], //messages from the server will now be stored here as they arrive
-      socket: new WebSocket('http://localhost:3001'.replace(/^http(s)?/, "ws$1"))
+      socket: new WebSocket('http://localhost:3001'.replace(/^http(s)?/, "ws$1")),
+      usersOnline: 0
     }
   }
 
@@ -40,6 +41,14 @@ class App extends Component {
     this.state.socket.onopen = function(event) {
       console.log('Connected to server');
     };
+    this.state.socket.onmessage = (event) => {
+      console.log(event);
+      let receivedData = parseInt(event.data);
+      console.log(receivedData)
+      if (!!receivedData && typeof receivedData === 'number') {
+        this.updateUsers(receivedData);
+      }
+    }
   }
 
   handleNotification = (newNotification) => {
@@ -47,6 +56,11 @@ class App extends Component {
     this.setState({messages: messages});
   }
 
+  updateUsers = (usersOnline) => {
+    this.setState({usersOnline: usersOnline})
+  }
+
+// only activates on handlemessage
   handleMessage = (newMessage) => {
     // const messages = this.state.messages.concat(newMessage);
     // this.setState({messages: messages});
@@ -56,8 +70,10 @@ class App extends Component {
       if (!!receivedData.content) {
        const messages = this.state.messages.concat(receivedData);
         this.setState({messages: messages});
-      } else if (!!receivedData.type) {
+      } else if (!!receivedData.type && typeof receivedData !== 'number') {
         this.handleNotification(receivedData);
+      } else if (typeof receivedData === 'number') {
+        this.updateUsers(receivedData);
       } else {
         this.setState({currentUser: receivedData.data});
         this.state.socket.send(JSON.stringify({type: "postNotification", content: `${this.state.currentUser.name} has changed their name to ${receivedData.data.name}`}));
@@ -70,7 +86,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Nav />
+        <Nav usersOnline={this.state.usersOnline} />
         <MessageList messages={this.state.messages} />
         <div className="message system">
           Anonymous1 changed their name to nomnom.
