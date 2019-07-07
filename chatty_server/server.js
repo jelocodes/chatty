@@ -40,7 +40,6 @@ wss.on('connection', (ws) => {
   ws.on('message', function incoming(data){
     const dataJSON = JSON.parse(data)
     dataJSON.id = uuidv4();
-    console.log(dataJSON);
     if (!!(dataJSON.content) || !!(dataJSON.type)) {
       wss.clients.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
