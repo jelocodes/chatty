@@ -56,6 +56,7 @@ class App extends Component {
     // this.setState({messages: messages});
     this.state.socket.send(JSON.stringify(newMessage));
     this.state.socket.onmessage = (event) => {
+      console.log(JSON.parse(event.data))
       let receivedData = JSON.parse(event.data);
       if (!!receivedData.content) {
        const messages = this.state.messages.concat(receivedData);
@@ -81,7 +82,7 @@ class App extends Component {
         <div className="message system">
           Anonymous1 changed their name to nomnom.
         </div>
-        <ChatBar currentUser={this.state.currentUser.name} generateRandomString={this.generateRandomString} handleMessage={this.handleMessage} />
+        <ChatBar currentUser={this.state.currentUser.name} handleMessage={this.handleMessage} />
       </div>
     );
   }

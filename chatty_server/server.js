@@ -38,17 +38,17 @@ wss.on('connection', (ws) => {
     });
   });
   ws.on('message', function incoming(data){
-    data.id = uuidv4();
-    console.log(data);
-    console.log(!!(JSON.parse(data)).content)
-    if (!!(JSON.parse(data)).content || !!(JSON.parse(data)).type) {
+    const dataJSON = JSON.parse(data)
+    dataJSON.id = uuidv4();
+    console.log(dataJSON);
+    if (!!(dataJSON.content) || !!(dataJSON.type)) {
       wss.clients.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
-          client.send(data);
+          client.send(JSON.stringify(dataJSON));
         }
       });
     } else {
-      ws.send(data);
+      ws.send(dataJSON);
     }
   });
 });
