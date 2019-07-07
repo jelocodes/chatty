@@ -8,21 +8,11 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
-      currentUser: {name: "Micodes"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [], //messages from the server will now be stored here as they arrive
       socket: new WebSocket('http://localhost:3001'.replace(/^http(s)?/, "ws$1")),
       usersOnline: 0
     }
-  }
-
-  generateRandomString = () => {
-    let result = '';
-    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let charactersLength = characters.length;
-    for (let i = 0; i < 6; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
   }
 
   componentDidMount() {
@@ -75,8 +65,8 @@ class App extends Component {
       } else if (typeof receivedData === 'number') {
         this.updateUsers(receivedData);
       } else {
+        this.state.socket.send(JSON.stringify({type: "postNotification", content: `${this.state.currentUser.name} changed their name to ${receivedData.data.name}`}));
         this.setState({currentUser: receivedData.data});
-        this.state.socket.send(JSON.stringify({type: "postNotification", content: `${this.state.currentUser.name} has changed their name to ${receivedData.data.name}`}));
       }
     };
   }
