@@ -52,18 +52,18 @@ class App extends Component {
 
 // only activates on handlemessage
   handleMessage = (newMessage) => {
-    // const messages = this.state.messages.concat(newMessage);
-    // this.setState({messages: messages});
+    // sending the message to serverside socket connection
     this.state.socket.send(JSON.stringify(newMessage));
+    // catching the message on the client-side after the server socket parses the data and decides to broadcast it or not
     this.state.socket.onmessage = (event) => {
-      console.log(JSON.parse(event.data))
       let receivedData = JSON.parse(event.data);
+      //if the incoming data has a content property, meaning it's a message, update the state appropriately
       if (!!receivedData.content) {
-       const messages = this.state.messages.concat(receivedData);
-        this.setState({messages: messages});
-      } else if (!!receivedData.type && typeof receivedData !== 'number') {
+        const messages = this.state.messages.concat(receivedData);
+        this.setState({messages: messages}); //update state appropriately
+      } else if (!!receivedData.type && typeof receivedData !== 'number') { //if the data is a notification, display it
         this.handleNotification(receivedData);
-      } else if (typeof receivedData === 'number') {
+      } else if (typeof receivedData === 'number') { //if the data is a number, update the user count
         this.updateUsers(receivedData);
       } else {
         this.state.socket.send(JSON.stringify({type: "postNotification", content: `${this.state.currentUser.name} changed their name to ${receivedData.data.name}`}));
@@ -79,9 +79,6 @@ class App extends Component {
       <div>
         <Nav usersOnline={this.state.usersOnline} />
         <MessageList messages={this.state.messages} />
-        <div className="message system">
-          Anonymous1 changed their name to nomnom.
-        </div>
         <ChatBar currentUser={this.state.currentUser.name} handleMessage={this.handleMessage} />
       </div>
     );
