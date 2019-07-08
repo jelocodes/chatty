@@ -48,22 +48,24 @@ class App extends Component {
     this.setState({messages: messages});
   }
 
-  handleData = (newData) => {
+  handleData = (newData, cb) => {
     // sending the message to serverside socket connection
     this.state.socket.send(JSON.stringify(newData));
     // catching the message on the client-side after the server socket parses the data and decides to broadcast it or not
     this.state.socket.onmessage = (event) => {
-      let receivedData = JSON.parse(event.data); //converting to object
+      let receivedData = JSON.parse(event.data); //converting to js object
       if (!!receivedData.content) {
-        this.broadcastMessage(receivedData); //if the data has a content property, meaning it's a message, update the state appropriately
-      } else if (!!receivedData.status) { //if the data is a status notification, display it
+        this.broadcastMessage(receivedData); //if the data has a content property, meaning it's a message, broadcast the message
+      } else if (!!receivedData.status) { //if the data is a status notification, broadcast it
         this.handleNotification(receivedData);
       } else if (typeof receivedData === 'number') { //if the data is a number, update the user count
         this.updateUsers(receivedData);
-      } else if (!!receivedData.name) { //if the data is a username, update individual client's username
+      } else if (!!receivedData.name) { //if the data is a username, update the individual client's username
         this.updateUserName(receivedData.name)
       }
     };
+
+    cb; //call the callback method if there is one (when the user wants to do more than one thing (i.e. send a message and change their username))
   }
 
 
