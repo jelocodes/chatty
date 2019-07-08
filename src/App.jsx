@@ -36,7 +36,8 @@ class App extends Component {
   }
 
   updateUsers = (usersOnline) => {
-    this.setState({usersOnline: usersOnline})
+    const messages = this.state.messages.concat({status: "> New user has joined the chat"})
+    this.setState({usersOnline: usersOnline, messages: messages})
   }
 
   updateUserName = (name) => {
