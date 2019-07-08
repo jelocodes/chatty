@@ -32,9 +32,7 @@ class App extends Component {
       console.log('Connected to server');
     };
     this.state.socket.onmessage = (event) => {
-      console.log(event);
       let receivedData = parseInt(event.data);
-      console.log(receivedData)
       if (!!receivedData && typeof receivedData === 'number') {
         this.updateUsers(receivedData);
       }
@@ -42,9 +40,8 @@ class App extends Component {
   }
 
   handleNotification = (newNotification) => {
-    console.log(newNotification);
     const messages = this.state.messages.concat(newNotification);
-    this.setState({messages: messages});
+    this.setState({currentUser: {name: newNotification.newname}, messages: messages});
   }
 
   updateUsers = (usersOnline) => {
