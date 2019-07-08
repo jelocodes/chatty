@@ -38,18 +38,25 @@ wss.on('connection', (ws) => {
     });
   });
   ws.on('message', function incoming(data){
+    // parsing string into JS object
     const dataJSON = JSON.parse(data)
-    console.log(data);
-    console.log(dataJSON);
+
+    // adding unique identifier to message
     dataJSON.id = uuidv4();
+
+    // broadcast to all clients if data is either a message or status notification
     if (!!(dataJSON.content) || !!(dataJSON.status)) {
       wss.clients.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify(dataJSON));
+          client.send(JSON.stringify(dataJSON)); //pass string back to client socket
         }
       });
-    } else {
-      ws.send(dataJSON);
+    }
+
+    // change individual client's name if needed
+    if (!!dataJSON.newname) {
+      console.log(typeof dataJSON.newname)
+      ws.send(`{"name": "${dataJSON.newname}"}`); //pass string back to client socket
     }
   });
 });
