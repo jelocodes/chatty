@@ -55,7 +55,6 @@ wss.on('connection', (ws) => {
 
     // change individual client's name if needed
     if (!!dataJSON.newname) {
-      console.log(typeof dataJSON.newname)
       ws.send(`{"name": "${dataJSON.newname}"}`); //pass string back to client socket
     }
   });
