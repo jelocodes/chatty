@@ -1,27 +1,19 @@
-React Boilerplate
-=====================
+# Chatty App
 
-A minimal and light dev environment for ReactJS.
+Chatty App is a simple single-page chat app using Express, React JS and Websockets. Frictionless, easy and anonymous, with no sign in required. Get chatting in seconds.
 
-### Usage
+## Sreenshots
 
-Clone the boilerplate and create your own git repo.
+!["The app in action"](https://github.com/jelocodes/chatty/blob/master/docs/chatty.gif?raw=true)
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
 
-Install the dependencies and start the server.
+## Getting Started
 
-```
-npm install
-npm start
-open http://localhost:3000
-```
+1. Fork this repository, then clone your fork of this repository.
+2. Install dependencies using the `npm install` command.
+3. Start both client-side and server-side servers using the `npm start` script. The app will be served at <http://localhost:3000/>.
+4. Go to <http://localhost:3000/> in your browser.
+5. Open the app in a different local window to see real-time updates.
 
 ### Static Files
 
@@ -31,15 +23,28 @@ For example, if you copy a file called my_image.png into the build folder you ca
 
 ### Linting
 
-This boilerplate project includes React ESLint configuration.
+This project includes React ESLint configuration.
 
-```
-npm run lint
-```
+## Dependencies
 
-### Dependencies
+- Express
+- Node 5.10.x or above
+- UUID
+- ws
+- Webpack
+- [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+- [babel-loader](https://github.com/babel/babel-loader)
+- React JS
 
-* React
-* Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+## To-Dos:
+- Add colored usernames
+- Add image uploads
+- Make responsive
+
+
+## Contributing
+This project is still under development, and bug and pull requests are welcome on Github at https://github.com/jelocodes/chatty. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the Contributor Covenant code of conduct.
+
+## License
+This codebase is available as open source under the terms of the MIT License.
+
