@@ -4,7 +4,7 @@ class Status extends Component {
   render() {
     return (
       <div className="message system">
-        {this.props.message.content}
+        {this.props.message.status}
       </div>
     );
   }

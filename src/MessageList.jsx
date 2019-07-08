@@ -8,7 +8,7 @@ class MessageList extends Component {
     <main className="messages">
       {this.props.messages.map((message) => {
         return (
-          (!!message.type) ? <Status message={message} /> : <Message key={message.id} message={message} />
+          (!!message.status) ? <Status key={message.id} message={message} /> : <Message key={message.id} message={message} />
           )
       })}
     </main>);

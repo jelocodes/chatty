@@ -42,6 +42,7 @@ class App extends Component {
   }
 
   handleNotification = (newNotification) => {
+    console.log(newNotification);
     const messages = this.state.messages.concat(newNotification);
     this.setState({messages: messages});
   }
@@ -61,17 +62,13 @@ class App extends Component {
       if (!!receivedData.content) {
         const messages = this.state.messages.concat(receivedData);
         this.setState({messages: messages}); //update state appropriately
-      } else if (!!receivedData.type && typeof receivedData !== 'number') { //if the data is a notification, display it
+      } else if (!!receivedData.status) { //if the data is a notification, display it
         this.handleNotification(receivedData);
       } else if (typeof receivedData === 'number') { //if the data is a number, update the user count
         this.updateUsers(receivedData);
-      } else {
-        this.state.socket.send(JSON.stringify({type: "postNotification", content: `${this.state.currentUser.name} changed their name to ${receivedData.data.name}`}));
-        this.setState({currentUser: receivedData.data});
       }
     };
   }
-
 
 
   render() {
